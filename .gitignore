@@ -8,17 +8,17 @@
 .*.lck
 
 # Gerber Files
-# *.GBL
-# *.GBO
-# *.GBS
-# *.GML
-# *.GTL
-# *.GTO
-# *.GTP
-# *.GTS
-# *.TXT
-# *.dri
-# *.gpi
-# *.xcf
+*.GBL
+*.GBO
+*.GBS
+*.GML
+*.GTL
+*.GTO
+*.GTP
+*.GTS
+*.TXT
+*.dri
+*.gpi
+*.xcf
 
 

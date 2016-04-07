@@ -14,7 +14,7 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="16" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="16" fill="1" visible="no" active="yes"/>
 <layer number="22" name="bPlace" color="14" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
@@ -1159,8 +1159,10 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="17.78" y1="70.8444125" x2="17.4419875" y2="71.182425" width="0.6096" layer="1"/>
 <wire x1="33.02" y1="22.86" x2="30.942325" y2="24.937675" width="0.8128" layer="1"/>
 <wire x1="30.942325" y1="24.937675" x2="30.942325" y2="29.63266875" width="0.8128" layer="1"/>
-<wire x1="33.358009375" y1="71.182425" x2="33.358009375" y2="49.4485125" width="0.6096" layer="1"/>
-<wire x1="33.358009375" y1="49.4485125" x2="43.818653125" y2="38.98786875" width="0.6096" layer="1"/>
+<wire x1="33.358009375" y1="71.182425" x2="33.358009375" y2="69.194490625" width="0.6096" layer="1"/>
+<wire x1="33.358009375" y1="69.194490625" x2="41.275" y2="61.2775" width="0.6096" layer="1"/>
+<wire x1="41.275" y1="61.2775" x2="41.275" y2="41.5925" width="0.6096" layer="1"/>
+<wire x1="41.275" y1="41.5925" x2="43.818653125" y2="38.98786875" width="0.6096" layer="1"/>
 <wire x1="31.600734375" y1="69.8839" x2="32.059484375" y2="69.8839" width="0.6096" layer="16"/>
 <wire x1="32.059484375" y1="69.8839" x2="33.358009375" y2="71.182425" width="0.6096" layer="16"/>
 </signal>

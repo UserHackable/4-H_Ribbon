@@ -3,11 +3,9 @@
 /Reference
 *.?#?
 *.pdf
-*.zip
 .*.swp
 .*.lck
 
-# Gerber Files
 *.GBL
 *.GBO
 *.GBS

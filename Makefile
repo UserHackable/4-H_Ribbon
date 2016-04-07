@@ -1,15 +1,8 @@
 # # Put in your GitHub account details.
-# GITHUB_USER=foo
-# GITHUB_API_TOKEN=foo
-# 
-# # Project name = directory name.
-# # TO DO: This variable seems to fail sometimes. Fix it.
-# #PROJECT_NAME=$${PWD\#\#*/}
-# 
-# # For now it's just written in the makefile and you manually change it.
-# PROJECT_NAME=test
 # 
 # # Gerbv PCB image preview parameters - colours, plus resolution.
+-include gerbv_colors.mk # load colors 
+
 GERBER_IMAGE_RESOLUTION?=600
 BACKGROUND_COLOR?=\#006600
 HOLES_COLOR?=\#000000
@@ -20,21 +13,10 @@ BOTTOM_SOLDERMASK_COLOR?=\#2D114A
 GERBV_OPTIONS= --export=png --dpi=$(GERBER_IMAGE_RESOLUTION) --background=$(BACKGROUND_COLOR) --border=1
 
 # # STUFF YOU WILL NEED:
-# # - git, gerbv and eagle must be installed and must be in path.
-# # - Got GitHub account?
-# # - GitHub set up with your SSH keys etc.
-# # - Put your GitHub username and private API key in the makefile
+# #  gerbv and eagle must be installed and must be in path.
 # 
 # # On Mac OSX we will create a link to the Eagle binary:
 # # sudo ln -s /Applications/EAGLE/EAGLE.app/Contents/MacOS/EAGLE /usr/bin/eagle 
-# 
-# .SILENT: all gerbers git github clean
-# 
-# all : gerbers git github
-# 
-# .PHONY: gerbers
-# 
-
 
 boards := $(wildcard *.brd)
 zips := $(patsubst %.brd,%_gerber.zip,$(boards))
@@ -44,6 +26,10 @@ gpis := $(patsubst %.brd,%.gpi,$(boards))
 back_pngs := $(patsubst %.brd,%_back.png,$(boards))
 mds := $(patsubst %.brd,%.md,$(boards))
 
+# .SILENT: all gerbers git github clean
+
+# .PHONY: gerbers
+
 .SECONDARY: $(pngs)
 
 .INTERMEDIATE: $(dris) $(gpis)
@@ -52,7 +38,7 @@ GERBER_DIR=gerbers
 
 .PHONY: zips pngs md clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds all
 
-all: md zips
+all: md zips git
 
 zips: $(zips)
 
@@ -120,13 +106,16 @@ README.md: Intro.md $(mds)
 	echo "\n\n| Front | Back |\n| --- | --- |\n| ![Front]($*.png) | ![Back]($*_back.png) |\n\n" >>  $@
 
 .gitignore:
-	echo "\n*~\n.*.swp\n*.?#?\n.*.lck" > .gitignore
+	echo "\n*~\n.*.swp\n*.?#?\n.*.lck" > $@
 
-.git:
-	echo "\n*~\n.*.swp\n*.?#?\n.*.lck" > .gitignore
+.git: .gitignore
 	git init
 	git add .
 	git commit -m 'First Commit'
+
+git: .git
+	git add . --all
+	git commit -am 'from Makefile'
 
 Intro.md:
 	touch Intro.md

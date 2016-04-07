@@ -45,10 +45,13 @@ mds := $(patsubst %.brd,%.md,$(boards))
 
 GERBER_DIR=gerbers
 
+.PHONY: zips pngs all clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds
+
 zips: $(zips)
+
 pngs: $(pngs) $(back_pngs)
-readme: README.md
-all: zips pngs readme
+
+all: pngs README.md zips 
 
 README.md: Intro.md $(mds)
 	cat $+ > README.md 
@@ -133,7 +136,7 @@ clean_zips:
 	rm -f *.zip
 
 clean_mds:
-	rm $(mds) README.md
+	rm -f $(mds) README.md
 
 clean: clean_gerbers clean_temps clean_pngs clean_zips clean_mds
 

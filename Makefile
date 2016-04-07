@@ -116,6 +116,7 @@ README.md: Intro.md $(mds)
 git: .git
 	git add . --all
 	git commit -am 'from Makefile'
+	git push
 
 Intro.md:
 	touch Intro.md

@@ -34,6 +34,8 @@ mds := $(patsubst %.brd,%.md,$(boards))
 
 .INTERMEDIATE: $(dris) $(gpis)
 
+.IGNORE: git
+
 GERBER_DIR=gerbers
 
 .PHONY: zips pngs md clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds all

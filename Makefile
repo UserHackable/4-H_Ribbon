@@ -35,17 +35,24 @@ GERBV_OPTIONS= --export=png --dpi=$(GERBER_IMAGE_RESOLUTION) --background=$(BACK
 # .PHONY: gerbers
 # 
 
-.SECONDARY: .png
 
 boards := $(wildcard *.brd)
 zips := $(patsubst %.brd,%_gerber.zip,$(boards))
 pngs := $(patsubst %.brd,%.png,$(boards))
+dris := $(patsubst %.brd,%.dri,$(boards))
+gpis := $(patsubst %.brd,%.gpi,$(boards))
 back_pngs := $(patsubst %.brd,%_back.png,$(boards))
 mds := $(patsubst %.brd,%.md,$(boards))
 
+.SECONDARY: $(pngs)
+
+.INTERMEDIATE: $(dris) $(gpis)
+
 GERBER_DIR=gerbers
 
-.PHONY: zips pngs all mds clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds
+.PHONY: zips pngs md clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds all
+
+all: md zips
 
 zips: $(zips)
 
@@ -53,15 +60,14 @@ pngs: $(pngs) $(back_pngs)
 
 md: $(mds) README.md
 
-all: $(zips) $(pngs) $(back_pngs) $(mds) README.md 
-
 README.md: Intro.md $(mds)
 	cat $+ > README.md 
+	rm -f $(mds)
 
 %.GTL: %.brd
 	eagle -X -d GERBER_RS274X -o $@ $< Top Pads Vias Dimension
 
-mds %.GBL: %.brd
+%.GBL: %.brd
 	eagle -X -d GERBER_RS274X -o $@ $< Bottom Pads Vias Dimension
 
 %.GTO: %.brd
@@ -82,15 +88,15 @@ mds %.GBL: %.brd
 %.GML: %.brd
 	eagle -X -d GERBER_RS274X -o $@ $< Milling
 
-# board outline
-%.OLN: %.brd
-	eagle -X -d GERBER_RS274X -o $@ $< Dimension
-
 %.TXT: %.brd
 	eagle -X -d EXCELLON_24 -o $@ $< Drills Holes
 
+%.OLN: %.brd
+	eagle -X -d GERBER_RS274X -o $@ $< Dimension
+
 %_gerber.zip: %.GTL %.GBL %.GTO %.GTP %.GBO %.GTS %.GBS %.GML %.TXT %.png %_back.png
-	zip $@ $^ $*.dri
+	zip $@ $^ $*.dri $*.gpi 
+	rm -f $*.dri $*.gpi
 
 %.png: %.TXT %.GTO %.GTS %.GTL
 	gerbv $(GERBV_OPTIONS) --output=$@ \
@@ -98,7 +104,7 @@ mds %.GBL: %.brd
         --f=$(SILKSCREEN_COLOR) $*.GTO \
         --f=$(PADS_COLOR) $*.GTS \
         --f=$(TOP_SOLDERMASK_COLOR) $*.GTL
-	convert $@ -alpha set -fill none -draw 'matte 0,0 floodfill' -trim $@
+	convert $@ -alpha set -fill none -draw 'matte 0,0 floodfill' \( +clone -alpha extract -negate -morphology EdgeIn Diamond -negate -transparent white \) -background none -flatten -trim +repage $@
 
 %_back.png: %.TXT %.GBO %.GBS %.GBL
 	gerbv $(GERBV_OPTIONS) --output=$@ \
@@ -106,7 +112,7 @@ mds %.GBL: %.brd
         --f=$(SILKSCREEN_COLOR) $*.GBO \
         --f=$(PADS_COLOR) $*.GBS \
         --f=$(TOP_SOLDERMASK_COLOR) $*.GBL
-	convert $@ -alpha set -fill none -draw 'matte 0,0 floodfill' -flop -trim +repage $@
+	convert $@ -alpha set -fill none -draw 'matte 0,0 floodfill' -flop \( +clone -alpha extract -negate -morphology EdgeIn Diamond -negate -transparent white \) -background none -flatten -trim +repage $@
 
 %.md: %.png %_back.png %.GTL
 	echo "## $* \n\n" >  $@

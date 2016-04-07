@@ -187,7 +187,7 @@ Hands Health</text>
 <wire x1="47.09915" y1="64.811725" x2="49.203471875" y2="59.73144375" width="0" layer="20"/>
 <wire x1="49.203471875" y1="59.73144375" x2="50.8" y2="51.70515" width="0" layer="20" curve="-22.499993"/>
 <wire x1="50.8" y1="51.70515" x2="50.8" y2="50.645209375" width="0" layer="20"/>
-<text x="39.37" y="29.21" size="0.6096" layer="21" align="center">18 USC 707</text>
+<text x="39.37" y="29.21" size="0.7112" layer="21" ratio="12" align="center">18 USC 707</text>
 </plain>
 <libraries>
 <library name="SparkFun-DigitalIC">

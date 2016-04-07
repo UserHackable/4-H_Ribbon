@@ -45,13 +45,15 @@ mds := $(patsubst %.brd,%.md,$(boards))
 
 GERBER_DIR=gerbers
 
-.PHONY: zips pngs all clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds
+.PHONY: zips pngs all mds clean clean_gerbers clean_temps clean_pngs clean_zips clean_mds
 
 zips: $(zips)
 
 pngs: $(pngs) $(back_pngs)
 
-all: pngs README.md zips 
+md: $(mds) README.md
+
+all: $(zips) $(pngs) $(back_pngs) $(mds) README.md 
 
 README.md: Intro.md $(mds)
 	cat $+ > README.md 
@@ -59,7 +61,7 @@ README.md: Intro.md $(mds)
 %.GTL: %.brd
 	eagle -X -d GERBER_RS274X -o $@ $< Top Pads Vias Dimension
 
-%.GBL: %.brd
+mds %.GBL: %.brd
 	eagle -X -d GERBER_RS274X -o $@ $< Bottom Pads Vias Dimension
 
 %.GTO: %.brd

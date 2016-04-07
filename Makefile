@@ -45,7 +45,10 @@ mds := $(patsubst %.brd,%.md,$(boards))
 
 GERBER_DIR=gerbers
 
-all: $(zips) $(pngs) $(back_pngs) README.md
+zips: $(zips)
+pngs: $(pngs) $(back_pngs)
+readme: README.md
+all: zips pngs readme
 
 README.md: Intro.md $(mds)
 	cat $+ > README.md 
@@ -117,41 +120,20 @@ README.md: Intro.md $(mds)
 Intro.md:
 	touch Intro.md
 
-clean:
-	rm -rf *.G[TBM][LOPS] *.TXT *.dri *.gpi
-	rm -rf *.[bs]#?
+clean_gerbers:
+	rm -f *.G[TBM][LOPS] *.TXT *.dri *.gpi
 
+clean_temps: 
+	rm -f *.[bs]#?
 
+clean_pngs:
+	rm -f *.png
 
-# # TO DO: Can we get Eagle to automatically export the schematic, as a PDF or PostScript or PNG, at the command line?
-# eagle -C "print file .pdf; quit;" Pixie85.sch
-# 
-# git : gerbers
-# 
-# 	if [ ! -d .git ]; then git init > /dev/null; fi
-# 	if [ -d ./gerbers ]; then git add ./gerbers; fi
-# 	for f in `ls *.brd *.sch *.png *.pdf *.txt *.markdown .gitignore 2> /dev/null`; do git add $$f; done
-# 	-git commit -m "foo" > /dev/null
-# 	echo "Files committed to local git repository."
-# 
-# github : git
-# 
-# # TO DO: When we call the API to see if the repository exists, it cannot see your private repos unless the username and key is put in.
-# 	
-# 	-curl -f https://github.com/api/v2/yaml/repos/show/$(GITHUB_USER)/$(PROJECT_NAME) > /dev/null 2>&1; \
-# 	if [ $$? -eq 0 ]; then echo "GitHub remote repository already exists."; fi
-# 
-# # TO DO: Known bug case - breaks if the GitHub repository exists but there is still a remote set for some reason in the local git repo.
-# 
-# 	-curl -f https://github.com/api/v2/yaml/repos/show/$(GITHUB_USER)/$(PROJECT_NAME) > /dev/null 2>&1; if [ $$? -eq 22 ]; then \
-# 	curl -F 'login=$(GITHUB_USER)' -F 'token=$(GITHUB_API_TOKEN)' https://github.com/api/v2/yaml/repos/create -F 'name=$(PROJECT_NAME)' > /dev/null 2>&1; \
-# 	git remote add origin git@github.com:$(GITHUB_USER)/$(PROJECT_NAME).git; echo "Built new GitHub remote repository."; fi
-# 	echo "Pushing to GitHub remote repository..."
-# 	git push -u origin master 2> /dev/null
-# 	echo "Done."
-# 
-# clean :
-# 	rm -rf *.{GTL,GBL,GTO,GTP,GBO,GTS,GBS,GML,TXT,dri,gpi,png}
-# 	rm -rf ./gerbers
-# 	rm -rf .git
-# 
+clean_zips:
+	rm -f *.zip
+
+clean_mds:
+	rm $(mds) README.md
+
+clean: clean_gerbers clean_temps clean_pngs clean_zips clean_mds
+

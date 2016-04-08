@@ -40,7 +40,7 @@ mds := $(patsubst %.brd,%.md,$(boards))
 
 # .PHONY: gerbers
 
-.SECONDARY: $(pngs)
+.SECONDARY: $(pngs) $(mds)
 
 .INTERMEDIATE: $(dris) $(gpis)
 
